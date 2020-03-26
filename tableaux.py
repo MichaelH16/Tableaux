@@ -11,6 +11,7 @@ listaInterpsVerdaderas = []
 # inicializa la lista de hojas
 listaHojas = []
 
+letrasProposicionales2 = ['p','-p']
 ##############################################################################
 # Definición de objeto tree y funciones de árboles
 ##############################################################################
@@ -63,8 +64,18 @@ def par_complementario(l):
 	# contiene un par complementario
 	# Input: l, una lista de literales
 	# Output: True/False
+	for i in range(0,len(l)-1):
+		if len(l[i]) == 1: #compruebo si el primer elemento es una letra proposicional sin negar
+			for j in range(i+1, len(l)):
+				s = '-'+ l[i] #S es  una variable donde describe la negacion de la letra escogida.
+				if l[j] == s: # se comprueba si la letra escogida es igual a su negacion
+					return True
+		if len(l[i]) == 2: #Se define si la letra escogida es una negacion.
+			for k in range(i+1, len(l)):
+				if l[i][1] == l[k]:# Se compueba si la latra escogida es igual a su negacion es decir la letra normal.
+					return True
 	return False
-
+	
 def es_literal(f):
 	# Esta función determina si el árbol f es un literal
 	# Input: f, una fórmula como árbol
