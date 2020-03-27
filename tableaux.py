@@ -94,7 +94,71 @@ def clasifica_y_extiende(f):
 	# de acuerdo a la regla respectiva
 	# Input: f, una fórmula como árbol
 	# Output: no tiene output, pues modifica la variable global listaHojas
-	global listaHojas
+	global listahojas
+    if f.label == '-':
+        if f.right.label == '-':
+            for l in listahojas:
+                for old in l:
+                    if old.right.label == f.right.label and old.right.left.label == f.right.left.label and old.right.right.label == f.right.right.label:
+                        l.remove(old)
+                        l.append([f.right.right])
+        elif f.right.label == 'O':
+            for l in listahojas:
+                for old in l:
+                    if old.right != None:
+                        if old.right.label == f.right.label and old.right.left.label == f.right.left.label and old.right.right.label == f.right.right.label :
+                            l.remove(old)
+                            l.append(Tree('-',None,f.right.left))
+                            l.append(Tree('-',None,f.right.right))
+        elif f.right.label == '->':
+            for l in listahojas:
+                for old in l:
+                    if old.right != None:
+                        if old.right.label == f.right.label and old.right.left.label == f.right.left.label and old.right.right.label == f.right.right.label :
+                            l.remove(old)
+                            l.append(f.right.left)
+                            l.append(Tree('-',None,f.right.right))
+        elif f.right.label == 'Y':
+            valores = []
+            for l in listahojas:
+                for old in l:
+                    valores.append(old)
+                    if old.right.label == f.right.label and old.right.left.label == f.right.left.label and old.right.right.label == f.right.right.label :
+                        l.remove(old)
+                        valores = l[:]
+                        l.append(Tree('-',None,f.right.left))
+                        valores.append(Tree('-',None,f.right.right))
+            listahojas.append(valores)
+
+    elif f.label == 'Y':
+        for l in listahojas:
+            for old in l:
+                if old.label == f.label and old.left.label == f.right.left.label and old.right.label==f.right.right.label:
+                    l.remove(old)
+                    l.append(f.left)
+                    l.append(f.right)
+    
+    elif f.label == 'O':
+        valores = []
+        for l in listahojas:
+            for old in l:
+                if old.label == f.label and old.left.label == f.right.left.label and old.right.label==f.right.right.label:
+                    l.remove(old)
+                    valores = l[:]
+                    l.append(f.left)
+                    valores.append(f.right)
+        listahojas.append(valores)
+    elif f.label == '->':
+        valores = []
+        for l in listahojas:
+            for old in l:
+                if old.label == f.label and old.left.label == f.left.label and old.right.label==f.right.label:
+                    l.remove(old)
+                    valores = l[:]
+                    l.append(Tree('-',None,f.right.left))
+                    valores.append(f.right.right)
+                valores.append(old)
+        listahojas.append(valores)
 
 def Tableaux(f):
 
