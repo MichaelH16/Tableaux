@@ -94,14 +94,15 @@ def clasifica_y_extiende(f):
 	# de acuerdo a la regla respectiva
 	# Input: f, una fórmula como árbol
 	# Output: no tiene output, pues modifica la variable global listaHojas
-	global listahojas
+def clasifica_y_extiende(f):
+    global listahojas
     if f.label == '-':
         if f.right.label == '-':
             for l in listahojas:
                 for old in l:
                     if old.right.label == f.right.label and old.right.left.label == f.right.left.label and old.right.right.label == f.right.right.label:
                         l.remove(old)
-                        l.append([f.right.right])
+                        l.apend([f.right.right])
         elif f.right.label == 'O':
             for l in listahojas:
                 for old in l:
@@ -133,7 +134,7 @@ def clasifica_y_extiende(f):
     elif f.label == 'Y':
         for l in listahojas:
             for old in l:
-                if old.label == f.label and old.left.label == f.right.left.label and old.right.label==f.right.right.label:
+                if old.label == f.label and old.left.label == f.left.label and old.right.label==f.right.label:
                     l.remove(old)
                     l.append(f.left)
                     l.append(f.right)
@@ -142,7 +143,7 @@ def clasifica_y_extiende(f):
         valores = []
         for l in listahojas:
             for old in l:
-                if old.label == f.label and old.left.label == f.right.left.label and old.right.label==f.right.right.label:
+                if old.label == f.label and old.left.label == f.left.label and old.right.label==f.right.label:
                     l.remove(old)
                     valores = l[:]
                     l.append(f.left)
