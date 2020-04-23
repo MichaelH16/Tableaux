@@ -58,10 +58,11 @@ def Tseitin(A, letrasProposicionalesA):
     while(len(A) > 0):
         #si es es un atomo
         #print(len(A))
-        if (s in letrasProposicionalesA or (s == "-"  and s[1] in letrasProposicionalesA)) and Pila != [] and Pila[-1] == '-':
+        
+        if (s in letrasProposicionalesA) and Pila != [] and Pila[-1] == '-':
             print("entra")
             I+=1
-            Atomo = LetrasProposicionalesB[I]
+            Atomo = letrasProposicionalesB[I]
             Pila = Pila[:-1]
             Pila.append(Atomo)
             #
