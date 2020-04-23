@@ -110,7 +110,7 @@ def Clausula(C):
     pila = []
     literal = ""
     for index in range(len(C)):
-        if C[index] != "O" and C[index] != "(" and C[index] != ")" and C[index] != "-" :
+        if C[index] != "O" and C[index] != "-" :
             if C[index-1] == "-":
                 literal += C[index-1]+C[index]
             else:
