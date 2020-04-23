@@ -123,5 +123,18 @@ def Clausula(C):
 def formaClausal(A):
 
     #  IMPLEMENTAR AQUI ALGORITMO FORMA CLAUSAL
-    pass
-    
+    L= []
+    i = 0
+    while(len(A)>0):
+        if (i>=len(A)):
+            L.append(Clausula(A))
+            A = []
+        else:
+            if A[i] == 'Y':
+                L.append(Clausula(A[:i]))
+                A = A[i+1:]
+                i = 0.
+            else:
+                i+=1
+    return L
+
