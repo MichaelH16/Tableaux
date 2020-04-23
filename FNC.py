@@ -134,7 +134,7 @@ def formaClausal(A):
             if A[i] == 'Y':
                 L.append(Clausula(A[:i]))
                 A = A[i+1:]
-                i = 0.
+                i = 0
             else:
                 i+=1
     return L
