@@ -107,7 +107,16 @@ def Clausula(C):
 
     #  IMPLEMENTAR AQUI ALGORITMO CLAUSULA
     pass
-
+    pila = []
+    literal = ""
+    for index in range(len(C)):
+        if C[index] != "O" and C[index] != "(" and C[index] != ")" and C[index] != "-" :
+            if C[index-1] == "-":
+                literal += C[index-1]+C[index]
+            else:
+                literal += C[index]
+    pila.append(literal)
+    return pila
 # Algoritmo para obtencion de forma clausal
 # Input: A (cadena) en notacion inorder en FNC
 # Output: L (lista), lista de listas de literales
@@ -115,3 +124,4 @@ def formaClausal(A):
 
     #  IMPLEMENTAR AQUI ALGORITMO FORMA CLAUSAL
     pass
+    
