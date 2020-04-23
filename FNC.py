@@ -66,7 +66,7 @@ def Tseitin(A, letrasProposicionalesA):
             Pila = Pila[:-1]
             Pila.append(Atomo)
             #
-            L.append(Atomo +"@¬"+s)
+            L.append(Atomo +"@-"+s)
             A = A[1:]
             if len(A)>0:
                 s = A[0]
