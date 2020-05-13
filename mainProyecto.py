@@ -11,20 +11,79 @@ y_st_c1 = 0
 x_ob_c1 = 2
 y_ob_c1 = 2
 #el tamano de donde lo vamos a hacer
-Nfilas = 3
-Ncols = 3
+Nfilas = 4
+Ncols = 4
 #numero de carros
 Ncarros = 2
 #cuantos tuernos maximos hay
-NMax = Nfilas - 1 + Ncols - 1
+#NMax = Nfilas - 1 + Ncols - 1
+NMax = 1
+#solo un carro en la visualizacion
+letras = []
+for k in range(Ncarros):
+    for i in range(Nfilas):
+        for e in range(Ncols):
+            for j in range(NMax):
+                v1 = codify.codifica4(k, i,e,j, Ncarros, Nfilas, Ncols, NMax)
+                cod = chr(v1+256)
+                print(cod, end=" ")
+                letras.append(cod)
+            print("")
 
 
+def crear_regla0():
+    #cada carro en un solo x, y en dado turno
+    iniciaRegla = True
+    for  t in range(NMax):
+        for c in range(Ncarros):
+            for x in range(Ncols):
+                for y in range(Nfilas):
+                    inicializaClausula = True
+                    for i in range(Ncols):
+                        for j in range(Nfilas):
+                            print("i", i, "j", j)
+                            if not(i == 0 and j == 0):
+                                if inicializaClausula:
+                                    claus = chr(256+codify.codifica4(c,(x+i+1)%Ncols,(y+j+1)%Nfilas,t, Ncarros, Ncols, Nfilas, NMax))
+                                    inicializaClausula = False
+                                    print("se inicializo la clausula",claus)
+
+                                else:
+                                    #a->b = ba->
+                                    claus+= chr(256+codify.codifica4(c,(x+i+1)%Ncols,(y+j+1)%Nfilas,t, Ncarros, Ncols, Nfilas, NMax))+ "O"
+                                    print("clausula else", claus)
+                    #P(c,x,y,t)->¬
+                    f = codify.string2Tree(claus, letras)
+                    print("aca va la clausula")
+                    print(codify.inorder(f))
+
+                    if iniciaRegla:
+                        regla = claus+"-"+chr(256+codify.codifica4(c,x,y,t, Ncarros, Ncols, Nfilas, NMax))+">"
+                        iniciaRegla = False
+                    else:
+                        regla += claus+"-"+chr(256+codify.codifica4(c,x,y,t, Ncarros, Ncols, Nfilas, NMax))+">"+"Y"
+
+    return regla
+
+
+
+print("***********************************")
+print("REGLA 0")
+stringRe = crear_regla0()
+print(stringRe)
+print("************************************")
+print("INORDER")
+
+print(codify.inorder(codify.string2Tree(stringRe,letras)))
+
+"""
 
 def crear_regla1():
     #esta regla establece que si un carro toma toma una via, ningun otro puede llegar a tomar la misma
     regla = ""
     #p->q en notacion polca inversa es qp->
     cons =  + "-"
+
 
 def crear_regla2():
     #corresponde a la regla que hace referencia a que un carro que sale de x_0 lugar debe llegar  a y_1 lugar en t turnos
@@ -44,18 +103,8 @@ def crear_regla2():
                 imp = cons + chr(codifica4(c, x_ob_c1, y_ob_c1, n) + 256) + ">"
             else:
                 imp += cons + chr(codifica4(c, x_ob_c1, y_ob_c1, n) + 256) + ">" + "Y"
-#crear todas las letras proposicinales
-"""
-letras = []
-for k in range(Ncarros):
-    for i in range(Nfilas):
-        for e in range(Ncols):
-            for j in range(NMax):
-                v1 = codify.codifica4(k, i,e,j, Ncarros, Nfilas, Ncols, NMax)
-                cod = chr(v1+256)
-                print(cod, end=" ")
-                letras.append(cod)
-            print("")
+#cear todas las letras proposicinales
+
 
 
 print("***************")
@@ -84,4 +133,5 @@ for a in letras:
 
 
 vs.showIt(diccionario)
+
 """
