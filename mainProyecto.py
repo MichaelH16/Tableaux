@@ -87,22 +87,31 @@ def crear_regla1():
 
 def crear_regla2():
     #corresponde a la regla que hace referencia a que un carro que sale de x_0 lugar debe llegar  a y_1 lugar en t turnos
-    for c in range(2):
-        Obj = codifica4(c, x_ob_c1, y_ob_c1, NMax)
+    cons = ""
+    inciar_imp = ""
+    for c in range(Ncarros):
+        Obj = codify.codifica4(c, x_ob_c1, y_ob_c1, NMax-1, Ncarros, Ncols, Nfilas, NMax)
         inicial_imp = True
         for n in range(NMax):
             inicial_con = True
-            for k in range(n + 1:NMax):
+            for k in range(n + 1,NMax):
                 if inicial_con:
-                    cons = chr(codifica4(c, x_ob_c1, y_ob_c1, k) + 256)
+                    cons = chr(codify.codifica4(c, x_ob_c1, y_ob_c1, k, Ncarros, Ncols, Nfilas, NMax) + 256)
                     inicial_con = False
                 else:
-                    cons += chr(codifica4(c, x_ob_c1, y_ob_c1, k) + 256) + "Y"
+                    cons += chr(codify.codifica4(c, x_ob_c1, y_ob_c1, k, Ncarros, Ncols, Nfilas, NMax) + 256) + "Y"
 
-            if inicial_imp:
-                imp = cons + chr(codifica4(c, x_ob_c1, y_ob_c1, n) + 256) + ">"
-            else:
-                imp += cons + chr(codifica4(c, x_ob_c1, y_ob_c1, n) + 256) + ">" + "Y"
+            if cons != "":
+                if inicial_imp:
+                    imp = cons + chr(codify.codifica4(c, x_ob_c1, y_ob_c1, n, Ncarros, Ncols, Nfilas, NMax) + 256) + ">"
+                else:
+                    imp += cons + chr(codify.codifica4(c, x_ob_c1, y_ob_c1, n, Ncarros, Ncols, Nfilas, NMax) + 256) + ">" + "Y"
+#cear todas las letras proposicinales
+
+        imp+= chr(Obj+256)+"Y"
+
+    return imp
+
 #cear todas las letras proposicinales
 
 
