@@ -48,7 +48,7 @@ def enFNC(A):
 # Output: B (cadena), Tseitin
 def Tseitin(A, letrasProposicionalesA):
     letrasProposicionalesB = [chr(x) for x in range(256, 1200)]
-    assert(not bool(set(letrasProposicionalesA) & set(letrasProposicionalesB))), u"¡Hay letras proposicionales en común!"
+    assert(not bool(set(letrasProposicionalesA ) & set(letrasProposicionalesB))), u"¡Hay letras proposicionales en común!"
 
     #  IMPLEMENTAR AQUI ALGORITMO TSEITIN
     L = [] #inicializamos lista de conjunciones
@@ -59,7 +59,7 @@ def Tseitin(A, letrasProposicionalesA):
         #si es es un atomo
         #print(len(A))
         
-        if (s in letrasProposicionalesA) and Pila != [] and Pila[-1] == '-':
+        if (s in letrasProposicionalesA or s in letrasProposicionalesB) and Pila != [] and Pila[-1] == '-':
             print("entra")
             I+=1
             Atomo = letrasProposicionalesB[I]
@@ -109,14 +109,13 @@ def Clausula(C):
     #  IMPLEMENTAR AQUI ALGORITMO CLAUSULA
     pass
     pila = []
-    literal = ""
+#    print(C)
     for index in range(len(C)):
         if C[index] != "O" and C[index] != "-" :
             if C[index-1] == "-":
-                literal += C[index-1]+C[index]
+                 pila.append(C[index-1]+C[index])
             else:
-                literal += C[index]
-    pila.append(literal)
+                pila.append(C[index])
     return pila
 # Algoritmo para obtencion de forma clausal
 # Input: A (cadena) en notacion inorder en FNC
