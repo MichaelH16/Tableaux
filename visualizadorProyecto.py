@@ -29,6 +29,16 @@ def showIt(pDiccionario):
             listaY.append(b)
 
     plt.plot(listaX, listaY, 'ko')
+
+    xdata = list(range(3))
+    plt.plot(xdata, [1,1,1], 'k')
+    plt.plot(xdata, [2,2,2], 'k')
+    plt.plot(xdata, [0,0,0], 'k')
+
+    ydata = list(range(3))
+    plt.plot([0,0,0], ydata, 'k')
+    plt.plot([1,1,1], ydata, 'k')
+    plt.plot([2,2,2], ydata, 'k')
     #ya se creo el tablero, ahora a mostrar lo que esta dadoen el diccionario que es dadas unas letras prop
     #las llaves son las letras y los valores, si es uno o 0
 
@@ -40,21 +50,37 @@ def showIt(pDiccionario):
         if pDiccionario[ok] == 1:
             #quisiere decir que si es uno es decir si si pasa por ese camino en este caso se descgola
             c,x,y,t = codify.decodifica4(ord(ok) - 256, Ncarros, Nfilas, Ncols, NMax)
-            if c == 0:
-                listXSolC1.append(x)
-                listYSolC1.append(y)
-            elif c== 1:
-                listXSolC2.append(x)
-                listYSolC2.append(y)
+            if t == 0:
+                if c == 0:
+                    plt.plot(x,y,"r*")
+                elif c== 1:
+                    plt.plot(x,y,"b*")
+            elif t == 1:
+                if c == 0:
+                    plt.plot(x,y,"r.")
+                elif c== 1:
+                    plt.plot(x,y,"b.")
+            elif t == 2:
+                if c == 0:
+                    plt.plot(x,y,"r,")
+                elif c== 1:
+                    plt.plot(x,y,"b,")
+            elif t == 3:
+                if c == 0:
+                    plt.plot(x,y,"rs")
+                elif c== 1:
+                    plt.plot(x,y,"bs")
+
+    #TODO:incluir el t, una figura diferente
 
     #ya con los caminos que tomaron ahora si se va a mostrar en pantlla
-    plt.plot(listXSolC1, listYSolC1, 'r*')
-    plt.plot(listXSolC2, listYSolC2, 'r*')
+    #plt.plot(listXSolC1, listYSolC1, 'r*')
+    #plt.plot(listXSolC2, listYSolC2, 'r*')
 
 
 
 
-
+    #plt.grid()
     plt.show()
 
 """
