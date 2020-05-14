@@ -1,4 +1,12 @@
 
+
+class Tree:
+    def __init__(self, pLabel, pLeft, pRight):
+        self.label = pLabel
+        self.left = pLeft
+        self.right = pRight
+
+
 def codifica(f, c, Nf, Nc):
     # Funcion que codifica la fila f y columna c
 
@@ -50,3 +58,41 @@ def decodifica4(j, Nc, Nx, Ny, Nt):
     c , x = decodifica(v2,Nc, Nx )
 
     return c,x,y,t
+
+def inorder(arb):
+    #retrona un string con como se deberia ber la formula de un arbol
+    if arb.right == None:
+        return arb.label
+    elif arb.label == "-":
+        return "-" + inorder(arb.right)
+    else:
+        return "(" + inorder(arb.left) + arb.label + inorder(arb.right)+ ")"
+
+
+#Transformar las cadenas en arboles
+
+def string2Tree(A, letrasProposicionales):
+    #Crea una formula como tree dada una formula
+    #como cadena escritra en notacion POLACA INVERSA
+    #Input: A, Lista de caracteres con una formula escrita en notacon polaca iinversa
+    #LetrasProposicionales, lista de letras proposicionales
+    #output: formula como tree
+    conectivos= ['O', 'Y', '>']
+    pila = []
+    for c in A:
+
+        if c in letrasProposicionales:
+            pila.append(Tree(c, None, None))
+            #print(inorder(Tree(c,None,None)))
+        elif c == "-":
+            FormulaAux = Tree(c, None, pila[-1])
+            del pila[-1]
+            pila.append(FormulaAux)
+        elif c in conectivos:
+            FormulaAux = Tree(c, pila[-1], pila[-2])
+            del pila[-1]
+            del pila[-1]
+            pila.append(FormulaAux)
+
+    return pila[-1]
+
