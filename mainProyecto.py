@@ -118,6 +118,32 @@ def crear_regla2():
 
 print("***************")
 
+def crear_regla3():
+    #esta regla establece que si hay un carro en cierta ubicacion en dado momento el otro no puede estar en esa misma ubicacion en el mismo momentoo
+
+    regla = ""
+    #si P(C1,x ,y, n) -> -(P(C2, x, y, n)
+    #sin variar el carro
+    inicicial_re = True
+    inicicial_re2 = True
+    for t in range(NMax):
+        for x in range(Ncols):
+            for y in range(Nfilas):
+                if(inicicial_re):
+                    ##a->b = >ab =ba->
+                    #P Y -(q O r)//YP-Oqr  // p->-q
+                    #//>p-q // q-p>
+                    claus =  chr(codify.codifica4(0,x,y, t, Ncarros, Ncols, Nfilas, NMax)+ 256)+ "-" +chr(codify.codifica4(1,x,y, t, Ncarros, Ncols, Nfilas, NMax)+ 256)+">"
+                    claus += chr(codify.codifica4(1,x,y, t, Ncarros, Ncols, Nfilas, NMax)+ 256)+ "-" +chr(codify.codifica4(0,x,y, t, Ncarros, Ncols, Nfilas, NMax)+ 256)+">" + "Y"
+                    inicicial_re = False
+                else:
+                    claus += chr(codify.codifica4(0,x,y, t, Ncarros, Ncols, Nfilas, NMax)+ 256)+ "-" +chr(codify.codifica4(1,x,y, t, Ncarros, Ncols, Nfilas, NMax)+ 256)+">" + "Y"
+                    claus += chr(codify.codifica4(1,x,y, t, Ncarros, Ncols, Nfilas, NMax)+ 256)+ "-" +chr(codify.codifica4(0,x,y, t, Ncarros, Ncols, Nfilas, NMax)+ 256)+">" + "Y"
+
+
+    return claus
+
+
 
 
 #aca simplemente es una prueba para ver como se decodifica
