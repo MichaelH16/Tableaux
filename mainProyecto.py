@@ -158,6 +158,23 @@ def crear_regla4():
             claus += chr(codify.codifica4(c,x_st[c],y_st[c], 0, Ncarros, Ncols, Nfilas, NMax)+ 256)+ "Y"
     return claus
 
+def crear_regla5():
+    #esta regla establece que un carro solo se puede mover un paso por cada turno
+    #P(c,x,y,t) > ( O )
+    incicial = True
+    claus= ""
+    for c in range(Ncarros):
+        for t in range(NMax-1):
+            for x in range(Ncols-1):
+                for y in range(Nfilas-1):
+                    if incicial:
+                        # P(c,x+1,y, t+1)+P(c,x,y+1, t+1)+O+P(c,x,y,t)+>
+                        claus = chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+"O"+chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">"
+                        inicial= False
+                    else:
+                        claus+= chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+"O"+chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">"+"Y"
+    return claus
+
 regla0 = crear_regla0()
 regla1 = crear_regla1()
 regla2 = crear_regla2()
