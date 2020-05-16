@@ -7,10 +7,10 @@ import visualizadorProyecto as vs
 
 #hace referencia al corro uno donde comiuenza
 x_st = [0,1]
-y_st = [0,0]
+y_st = [1,0]
 #donde deberia terminar
-x_ob = [2,1]
-y_ob = [0,2]
+x_ob = [1,2]
+y_ob = [1,2]
 #el tamano de donde lo vamos a hacer
 Nfilas = 3
 Ncols = 3
@@ -172,7 +172,14 @@ def crear_regla5():
                         claus = chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+"O"+chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">"
                         inicial= False
                     else:
-                        claus+= chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+"O"+chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">"+"Y"
+                        if (x>= 1 and y>=1 ):
+                            claus += chr(codify.codifica4(c,x,y-1,t+1, Ncarros, Ncols, Nfilas, NMax)+256) + chr(codify.codifica4(c,x-1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256) + "O" +chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256) + "O" + "O" + chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256) + ">" + "Y"
+                        elif (x>=1 and y == 0):
+                            claus += chr(codify.codifica4(c,x-1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256) + chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+ "O" +chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+ "O" + chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">" + "Y"                      
+                        elif (y>=1 and x == 0):
+                            claus += chr(codify.codifica4(c,x,y-1,t+1, Ncarros, Ncols, Nfilas, NMax)+256) + chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+ "O" +chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+ "O"  + chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">" + "Y"
+                        else:    
+                            claus+= chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+"O"+chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">"+"Y"
     return claus
 
 regla0 = crear_regla0()
@@ -180,6 +187,20 @@ regla1 = crear_regla1()
 regla2 = crear_regla2()
 regla3 = crear_regla3()
 regla4 = crear_regla4()
+regla5 = crear_regla5()
+
+#arbol = codify.Inorder(codify.string2Tree(regla5,letras))
+#
+#print("***regla 5 ",regla5)
+#for c in arbol:
+#    if c in letras:
+#        lista = codify.decodifica4(ord(c)-256,Ncarros, Ncols, Nfilas, NMax)
+#        print(c, " El carro ", lista[0], "esta en (",lista[1],"," , lista[2],") en el turno ", lista[3] )
+#        
+#
+#
+#print(codify.Inorder(codify.string2Tree(regla5,letras)))
+
 
 #print("******************************* ****")
 #print("REGLA 0")
@@ -191,15 +212,18 @@ regla4 = crear_regla4()
 
 #print(codify.Inorder(codify.string2Tree(regla2,letras)))
 #
-
 #print("INORDER regla 1")
 #
 #
 #print(codify.Inorder(codify.string2Tree(string1,letras)))
 #
+#regla3 + regla4 + regla2
 #
-#
-regla = regla2 +regla1 + regla3 +regla0 + regla4  +"Y" + "Y" +"Y"
+regla_max = regla5 + regla1 + "Y"
+regla_1 = regla4 + regla2 + "Y"
+regla_2 = regla3 + regla0 + ">"
+
+regla =  regla_max  + regla0 + regla_1 +  "Y" + "Y" 
 ###print("INORDER")
 ###print(codify.Inorder(codify.string2Tree(string1,letras)))
 ##
