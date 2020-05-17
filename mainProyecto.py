@@ -4,13 +4,12 @@ import DPLL as dp
 import visualizadorProyecto as vs
 
 #psewudomian
-
-#hace referencia al corro uno donde comiuenza
-x_st = [0,1]
+#Hace referencia donde comienza
+x_st = [0,0]
 y_st = [1,0]
 #donde deberia terminar
-x_ob = [1,2]
-y_ob = [1,2]
+x_ob = [1,1]
+y_ob = [0,1]
 #el tamano de donde lo vamos a hacer
 Nfilas = 3
 Ncols = 3
@@ -18,7 +17,7 @@ Ncols = 3
 Ncarros = 2
 #cuantos tuernos maximos hay
 #NMax = Nfilas - 1 + Ncols - 1
-NMax = 6
+NMax = 3
 #solo un carro en la visualizacion
 letras = []
 for k in range(Ncarros):
@@ -219,11 +218,8 @@ regla5 = crear_regla5()
 #
 #regla3 + regla4 + regla2
 #
-regla_max = regla5 + regla1 + "Y"
-regla_1 = regla4 + regla2 + "Y"
-regla_2 = regla3 + regla0 + ">"
+regla =  regla2+ regla3 + regla4 + regla0  + regla5 + "Y" + "Y" + "Y" + "Y"
 
-regla =  regla_max  + regla0 + regla_1 +  "Y" + "Y" 
 ###print("INORDER")
 ###print(codify.Inorder(codify.string2Tree(string1,letras)))
 ##
