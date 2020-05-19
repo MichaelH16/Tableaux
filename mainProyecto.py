@@ -1,15 +1,17 @@
+
 import codification as codify
 import FNC as ts
 import DPLL as dp
 import visualizadorProyecto as vs
 
 #psewudomian
-#Hace referencia donde comienza
-x_st = [0,0]
-y_st = [1,0]
+
+#hace referencia al corro uno donde comiuenza
+x_st = [0,2]
+y_st = [0,2]
 #donde deberia terminar
-x_ob = [1,1]
-y_ob = [0,1]
+x_ob = [2,0]
+y_ob = [2,0]
 #el tamano de donde lo vamos a hacer
 Nfilas = 3
 Ncols = 3
@@ -17,7 +19,7 @@ Ncols = 3
 Ncarros = 2
 #cuantos tuernos maximos hay
 #NMax = Nfilas - 1 + Ncols - 1
-NMax = 3
+NMax = 5
 #solo un carro en la visualizacion
 letras = []
 for k in range(Ncarros):
@@ -95,13 +97,15 @@ def crear_regla1():
     return regla
 
 
-
 def crear_regla2():
     #corresponde a la regla que hace referencia a que un carro que sale de x_0 lugar debe llegar  a y_1 lugar en t turnos
     cons = ""
-    inicial_imp = True
+    
+    inicial_regla = True
     for c in range(Ncarros):
+        inicial_imp = True
         Obj = codify.codifica4(c, x_ob[c], y_ob[c], NMax-1, Ncarros, Ncols, Nfilas, NMax)
+        print("*******")
         for n in range(NMax):
             inicial_con = True
             for k in range(n + 1,NMax):
@@ -116,22 +120,31 @@ def crear_regla2():
                     inicial_imp = False
                 else:
                     imp += cons + chr(codify.codifica4(c, x_ob[c], y_ob[c], n, Ncarros, Ncols, Nfilas, NMax) + 256) + ">" + "Y"
+        if inicial_regla:
+            regla = imp
+            inicial_regla = False
+        else:
+            regla += imp + "Y"
+            
 #cear todas las letras proposicinales
         if inicial_imp:
-            imp = chr(Obj+256)
+            regla = chr(Obj+256)
             inicial_imp = False
         else:
-            imp += chr(Obj+256)+"Y"
-    return imp
+            regla += chr(Obj+256)+"Y"
+    return regla
 
 
 
 def crear_regla3():
     #esta regla establece que si hay un carro en cierta ubicacion en dado momento el otro no puede estar en esa misma ubicacion en el mismo momentoo
+    regla = ""
     #si P(C1,x ,y, n) -> -(P(C2, x, y, n)
     #sin variar el carro
     inicicial_re = True
+    inicial_re2 = True
     for t in range(NMax):
+        inicicial_re = True
         for x in range(Ncols):
             for y in range(Nfilas):
                 if(inicicial_re):
@@ -144,10 +157,14 @@ def crear_regla3():
                 else:
                     claus += chr(codify.codifica4(0,x,y, t, Ncarros, Ncols, Nfilas, NMax)+ 256)+ "-" +chr(codify.codifica4(1,x,y, t, Ncarros, Ncols, Nfilas, NMax)+ 256)+">" + "Y"
                     claus += chr(codify.codifica4(1,x,y, t, Ncarros, Ncols, Nfilas, NMax)+ 256)+ "-" +chr(codify.codifica4(0,x,y, t, Ncarros, Ncols, Nfilas, NMax)+ 256)+">" + "Y"
-    return claus
+        if inicial_re2:
+            regla = claus
+            inicial_re2 = False
+        else:
+            regla += claus + "Y"
+    return regla
 
 def crear_regla4():
-    #Esta regla me dice la posicion inical de los carros 
     inicial_re = True
     for c in range(Ncarros):
         if (inicial_re):
@@ -160,27 +177,46 @@ def crear_regla4():
 def crear_regla5():
     #esta regla establece que un carro solo se puede mover un paso por cada turno
     #P(c,x,y,t) > ( O )
-    incicial = True
+    inicial_regla = True
     claus= ""
     for c in range(Ncarros):
+        inicial = True
         for t in range(NMax-1):
-            for x in range(Ncols-1):
-                for y in range(Nfilas-1):
-                    if incicial:
-                        # P(c,x+1,y, t+1)+P(c,x,y+1, t+1)+O+P(c,x,y,t)+>
-                        claus = chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+"O"+chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">"
-                        inicial= False
+            for x in range(Ncols):
+                for y in range(Nfilas):
+                    if inicial:
+                        # P(c,x+1,y, t+1)+P(c,x,y+1, t+1)+O+P(c,x,y,t)+>                     
+                            claus = chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+"O"+chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">"
+                            inicial = False
+                    
                     else:
-                        if (x>= 1 and y>=1 ):
-                            claus += chr(codify.codifica4(c,x,y-1,t+1, Ncarros, Ncols, Nfilas, NMax)+256) + chr(codify.codifica4(c,x-1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256) + "O" +chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256) + "O" + "O" + chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256) + ">" + "Y"
-                        elif (x>=1 and y == 0):
-                            claus += chr(codify.codifica4(c,x-1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256) + chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+ "O" +chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+ "O" + chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">" + "Y"                      
-                        elif (y>=1 and x == 0):
-                            claus += chr(codify.codifica4(c,x,y-1,t+1, Ncarros, Ncols, Nfilas, NMax)+256) + chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+ "O" +chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+ "O"  + chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">" + "Y"
-                        else:    
-                            claus+= chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+"O"+chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">"+"Y"
-    return claus
-
+                        if (x>= 1 and y>=1 and x<Ncols-1 and y<Nfilas-1 ):
+                            claus += chr(codify.codifica4(c,x,y-1,t+1, Ncarros, Ncols, Nfilas, NMax)+256) + chr(codify.codifica4(c,x-1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256) + "O" +chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256) + chr(codify.codifica4(c,x,y,t+1, Ncarros, Ncols, Nfilas, NMax) +256) + "O" + "O"  + "O"+ chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256) + ">" + "Y"
+                        elif (x>=1 and y == 0 and x<Ncols-1):
+                            claus += chr(codify.codifica4(c,x-1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256) + chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+ "O" +chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+ chr(codify.codifica4(c,x,y,t+1, Ncarros, Ncols, Nfilas, NMax) +256) + "O" +  "O" + chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">" + "Y"                      
+                        elif (y>=1 and x == 0 and y<Nfilas-1):
+                            claus += chr(codify.codifica4(c,x,y-1,t+1, Ncarros, Ncols, Nfilas, NMax)+256) + chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+ "O" +chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+ chr(codify.codifica4(c,x,y,t+1, Ncarros, Ncols, Nfilas, NMax) +256) + "O" + "O"  + chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">" + "Y"
+                        elif (x == Ncols-1 and y>0 and y<Nfilas-1):
+                            claus += chr(codify.codifica4(c,x-1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+ "O" + chr(codify.codifica4(c,x,y-1,t+1, Ncarros, Ncols, Nfilas, NMax)+256) + chr(codify.codifica4(c,x,y,t+1, Ncarros, Ncols, Nfilas, NMax) +256) + "O" + "O"+  chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">" + "Y"
+                        elif (y == Nfilas-1 and x>0 and x<Ncols-1):
+                            claus += chr(codify.codifica4(c,x,y-1,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+ "O" + chr(codify.codifica4(c,x-1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256) + chr(codify.codifica4(c,x,y,t+1, Ncarros, Ncols, Nfilas, NMax) +256) + "O" + "O" + chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">" + "Y"
+                        elif (x == Ncols-1 and y==0 ):
+                            claus += chr(codify.codifica4(c,x-1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+ chr(codify.codifica4(c,x,y,t+1, Ncarros, Ncols, Nfilas, NMax) +256) + "O" + "O" + chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">" + "Y"                          
+                        elif (y == Nfilas-1 and x==0 ):
+                            claus += chr(codify.codifica4(c,x,y-1,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+ chr(codify.codifica4(c,x,y,t+1, Ncarros, Ncols, Nfilas, NMax) +256) + "O" + "O" + chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">" + "Y"                            
+                        elif (x == Ncols-1 and y == Nfilas-1):
+                            claus+= chr(codify.codifica4(c,x-1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y-1,t+1, Ncarros, Ncols, Nfilas, NMax) +256) + chr(codify.codifica4(c,x,y,t+1, Ncarros, Ncols, Nfilas, NMax) +256) + "O" +  "O" +chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">"+"Y"
+                            
+                        else:            
+                            print("x",x , " y ", y)
+                            claus+= chr(codify.codifica4(c,x+1,y,t+1, Ncarros, Ncols, Nfilas, NMax)+256)+chr(codify.codifica4(c,x,y+1,t+1, Ncarros, Ncols, Nfilas, NMax) +256)+ chr(codify.codifica4(c,x,y,t+1, Ncarros, Ncols, Nfilas, NMax) +256) + "O" + "O"+chr(codify.codifica4(c,x,y,t,Ncarros, Ncols, Nfilas, NMax)+256)+">"+"Y"
+        if inicial_regla:
+            regla = claus
+            inicial_regla = False
+        else:
+            regla += claus + "Y"
+    
+    return regla
 regla0 = crear_regla0()
 regla1 = crear_regla1()
 regla2 = crear_regla2()
@@ -188,17 +224,19 @@ regla3 = crear_regla3()
 regla4 = crear_regla4()
 regla5 = crear_regla5()
 
+#print("***regla 5 ",regla5)
+#
 #arbol = codify.Inorder(codify.string2Tree(regla5,letras))
 #
-#print("***regla 5 ",regla5)
+#
+#
 #for c in arbol:
 #    if c in letras:
-#        lista = codify.decodifica4(ord(c)-256,Ncarros, Ncols, Nfilas, NMax)
+#        lista = codify.decodifica4(ord(c)-256,Ncarros, Ncols, Nfilas, NMax) 
 #        print(c, " El carro ", lista[0], "esta en (",lista[1],"," , lista[2],") en el turno ", lista[3] )
 #        
-#
-#
-#print(codify.Inorder(codify.string2Tree(regla5,letras)))
+##
+#print(codify.Inorder(codify.string2Tree(regla0,letras)))
 
 
 #print("******************************* ****")
@@ -218,29 +256,44 @@ regla5 = crear_regla5()
 #
 #regla3 + regla4 + regla2
 #
-regla =  regla2+ regla3 + regla4 + regla0  + regla5 + "Y" + "Y" + "Y" + "Y"
 
+
+
+#
+#
+#regla =  regla0 + regla4 + regla5 + regla3 +"Y" +"Y" +"Y"
+regla = regla0 + regla1 + regla2  + regla3 + regla4 + regla5 + "Y" +"Y" +"Y" +"Y" +"Y"
 ###print("INORDER")
-###print(codify.Inorder(codify.string2Tree(string1,letras)))
+#print(codify.Inorder(codify.string2Tree(regla,letras)))
 ##
 ##
+
 literales = ts.Tseitin(codify.Inorder(codify.string2Tree(regla,letras)),letras)
+
+lista = []
+
+for x in literales:
+    if x not in ["Y","O","-"]:
+        lista.append(ord(x)-256)
+
+print("Length: ",len(lista), "Max of the list: " , max(lista))
 #print("**Tseitin")
 #print(literales)
-
+#
 lista_literales = ts.formaClausal(literales)
-#print("**Forma clausal")
+print("**Forma clausal")
 #print(lista_literales)
 
 #print(lista_literales[68])
-regla0 = dp.DPLL(lista_literales,{})
-#print("solucion: ",regla0)
+final = dp.DPLL(lista_literales,{})
+#print("solucion: ",final)
 
-for literal in regla0[1]:
+for literal in final[1]:
     if literal in letras:
-        if regla0[1][literal] == 1:
+        if final[1][literal] == 1:
             lista = codify.decodifica4(ord(literal)-256,Ncarros, Ncols, Nfilas, NMax)
             print(literal, " El carro ", lista[0], "esta en (",lista[1],"," , lista[2],") en el turno ", lista[3] )
     
             
 
+vs.showIt(final[1])
